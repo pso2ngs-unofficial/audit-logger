@@ -113,7 +113,7 @@ async def on_audit_log_entry_create(entry: discord.AuditLogEntry):
 # Message Action Logging
 @client.event
 async def on_message_edit(before: discord.Message, after: discord.Message):
-    if before.author != client.user:
+    if before.author != client.user and not before.author.bot:
         title = f"Message edited in #{before.channel.name}"
         description = "**Before: **" + before.content + "\n"
         description += "**After: **" + after.content
