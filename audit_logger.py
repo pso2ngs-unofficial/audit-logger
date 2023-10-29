@@ -17,7 +17,7 @@ COLOR_BLUE = 0x4286f4
 
 
 # Client
-client = discord.Client(intents=discord.Intents.all())
+client = discord.Client(intents=discord.Intents.all(), status=discord.Status.invisible)
 
 
 # Generate embed for member action logging.
@@ -84,7 +84,7 @@ async def on_audit_log_entry_create(entry: discord.AuditLogEntry):
             # Update Member Timeout
             elif before_attribute == "timed_out_until":
                 if type(after_value) == datetime:
-                    value = f"`{after_value.replace(microsecond=0, tzinfo=TIMEZONE)}`"
+                    value = f"`{after_value.replace(microsecond=0, tzinfo=TIMEZONE) + timedelta(hours=+9)}`"
                     embed = generate_member_log(entry, target, "Member Timeout", "Duration", value, COLOR_ORANGE)
                 else:
                     embed = generate_member_log(entry, target, "Member Removed From Timeout", "", "", COLOR_YELLOW)
