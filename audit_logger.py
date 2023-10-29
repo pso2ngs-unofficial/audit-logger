@@ -3,8 +3,8 @@ from datetime import datetime, timedelta, timezone
 
 
 # Text Channel ID for logging.
-MEMBER_LOG_CHANNEL_ID = 1234567890
-MESSAGE_LOG_CHANNEL_ID = 1234567890
+MEMBER_LOG_CHANNEL_ID = 1123497484132569148
+MESSAGE_LOG_CHANNEL_ID = 1123498595828641893
 
 # Time zone for logging.
 TIMEZONE = timezone(timedelta(hours=+9), "Asia/Tokyo")
