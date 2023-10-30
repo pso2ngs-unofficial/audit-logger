@@ -25,7 +25,7 @@ client = discord.Client(intents=discord.Intents.all(), status=discord.Status.inv
 # Generate embed for member action logging.
 def generate_member_log(entry: discord.AuditLogEntry, target: discord.User, title: str, name: str, value: str, color: int) -> str:
     embed = discord.Embed(title=title, description=target.mention, color=color, timestamp=datetime.now(TIMEZONE))
-    embed.set_author(name=target.name, icon_url=target.avatar.url)
+    embed.set_author(name=target.name, icon_url=target.display_avatar.url)
     embed.add_field(name=name, value=value, inline=False)
     if entry.reason:
         embed.add_field(name="Reason", value=entry.reason, inline=False)
@@ -37,7 +37,7 @@ def generate_member_log(entry: discord.AuditLogEntry, target: discord.User, titl
 # Generate embed for message action logging.
 def generate_message_log(author: discord.Member, title: str, description: str, attachments: str, message_id: str, url: str, color: int) -> str:
     embed = discord.Embed(title=title, description=description, url=url, color=color, timestamp=datetime.now(TIMEZONE))
-    embed.set_author(name=author.name, icon_url=author.avatar.url)
+    embed.set_author(name=author.name, icon_url=author.display_avatar.url)
     if attachments:
         embed.add_field(name="Attachments", value="\n".join(attachments), inline=False)
     embed.add_field(name="Message ID", value=message_id, inline=False)
@@ -49,7 +49,7 @@ def generate_message_log(author: discord.Member, title: str, description: str, a
 # Generate embed for voice action logging.
 def generate_voice_log(member: discord.Member, title: str, description: str, color: int) -> str:
     embed = discord.Embed(title=title, description=description, color=color, timestamp=datetime.now(TIMEZONE))
-    embed.set_author(name=member.name, icon_url=member.avatar.url)
+    embed.set_author(name=member.name, icon_url=member.display_avatar.url)
     embed.set_footer(text="ID: "+ str(member.id))
 
     return embed
