@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 # Text Channel ID for logging.
 MEMBER_LOG_CHANNEL_ID = 1123497484132569148
 MESSAGE_LOG_CHANNEL_ID = 1123498595828641893
+VOICE_LOG_CHANNEL_ID = 1168577564764278904
 
 # Time zone for logging.
 TIMEZONE = timezone(timedelta(hours=+9), "Asia/Tokyo")
@@ -13,6 +14,7 @@ TIMEZONE = timezone(timedelta(hours=+9), "Asia/Tokyo")
 COLOR_ORANGE = 0xdda353
 COLOR_YELLOW = 0xd1dd53
 COLOR_RED = 0xdd5e53
+COLOR_GREEN = 0x53ddad
 COLOR_BLUE = 0x4286f4
 
 
@@ -40,6 +42,15 @@ def generate_message_log(author: discord.Member, title: str, description: str, a
         embed.add_field(name="Attachments", value="\n".join(attachments), inline=False)
     embed.add_field(name="Message ID", value=message_id, inline=False)
     embed.set_footer(text="ID: "+ str(author.id))
+
+    return embed
+
+
+# Generate embed for voice action logging.
+def generate_voice_log(member: discord.Member, title: str, description: str, color: int) -> str:
+    embed = discord.Embed(title=title, description=description, color=color, timestamp=datetime.now(TIMEZONE))
+    embed.set_author(name=member.name, icon_url=member.avatar.url)
+    embed.set_footer(text="ID: "+ str(member.id))
 
     return embed
 
@@ -138,6 +149,23 @@ async def on_message_delete(message: discord.Message):
         log_channel: discord.channel.TextChannel = message.guild.get_channel(MESSAGE_LOG_CHANNEL_ID)
         embed = generate_message_log(message.author, title, description, attachments, message_id, url, COLOR_RED)
         await log_channel.send(embed=embed)
+
+
+# Member Action Logging
+@client.event
+async def on_voice_state_update(member: discord.Member, before: discord.VoiceState, after: discord.VoiceState):
+    log_channel: discord.channel.TextChannel = member.guild.get_channel(VOICE_LOG_CHANNEL_ID)
+    
+    if after.channel:
+        title = "Member joined voice channel"
+        description = f"{member.mention} joined #{after.channel.name}"
+        embed = generate_voice_log(member, title, description, COLOR_GREEN)
+    else:
+        title = "Member left voice channel"
+        description = f"{member.mention} left #{before.channel.name}"
+        embed = generate_voice_log(member, title, description, COLOR_RED)
+
+    await log_channel.send(embed=embed)
 
 
 # Client Run
