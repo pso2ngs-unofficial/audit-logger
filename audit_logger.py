@@ -161,17 +161,20 @@ async def on_voice_state_update(member: discord.Member, before: discord.VoiceSta
             title = "Member joined voice channel"
             description = f"{member.mention} joined #{after.channel.name}"
             embed = generate_voice_log(member, title, description, COLOR_GREEN)
+            await log_channel.send(embed=embed)
+
     elif after.channel:
         title = "Member joined voice channel"
         description = f"{member.mention} joined #{after.channel.name}"
         embed = generate_voice_log(member, title, description, COLOR_GREEN)
+        await log_channel.send(embed=embed)
+
     else:
         title = "Member left voice channel"
         description = f"{member.mention} left #{before.channel.name}"
         embed = generate_voice_log(member, title, description, COLOR_RED)
-
-    await log_channel.send(embed=embed)
-
+        await log_channel.send(embed=embed)
+    
 
 # Client Run
 with open(".token", "r") as token:
