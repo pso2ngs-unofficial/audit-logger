@@ -156,10 +156,12 @@ async def on_message_delete(message: discord.Message):
 async def on_voice_state_update(member: discord.Member, before: discord.VoiceState, after: discord.VoiceState):
     log_channel: discord.channel.TextChannel = member.guild.get_channel(VOICE_LOG_CHANNEL_ID)
     
+    
     if after.channel:
-        title = "Member joined voice channel"
-        description = f"{member.mention} joined #{after.channel.name}"
-        embed = generate_voice_log(member, title, description, COLOR_GREEN)
+        if before.channel.id != after.channel.id:
+            title = "Member joined voice channel"
+            description = f"{member.mention} joined #{after.channel.name}"
+            embed = generate_voice_log(member, title, description, COLOR_GREEN)
     else:
         title = "Member left voice channel"
         description = f"{member.mention} left #{before.channel.name}"
